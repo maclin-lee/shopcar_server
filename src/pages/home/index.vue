@@ -3,7 +3,10 @@
         <navbar-gation 
          :title="title"
          :isLoc="isLoc">
-          <location slot="location" :location="location">	
+          <location  
+           slot="location" 
+          :location="city"
+          ref="location">	
           </location>
          </navbar-gation>
          <Swiper :swiperLen="swiperLenth"
@@ -53,6 +56,7 @@ import QuickTitle from "./quicks/quickTitle"
 import ScrollView from "components/scroller"
 import ScrollItem from "./scrollItem"
 import PageRow from "./pagerows"
+import Location from "../../tools/toos"
 // import {shopcar} from "nets/index"
 export default {
      name:"home",
@@ -82,6 +86,7 @@ export default {
         isScrollX:true,
         isVertical:false,
         probe:1,
+        city:"上海"
      	}
      },
      computed:{
@@ -119,9 +124,23 @@ export default {
       //         })
 
      },
-     methods:{
+     mounted(){
+        // console.log(this.$refs.location)
+        this.getLocation()
         
-     }
+     },
+     methods:{
+      getLocation() {
+      let _that = this;
+      let geolocation = Location.initMap("map-container"); //定位
+      // console.log(geolocation)
+      AMap.event.addListener(geolocation, "complete", result => {
+        // console.log(result)
+        _that.city = result.addressComponent.city;
+        
+      });
+    }   
+       }
 
 }
 </script>
