@@ -1,0 +1,52 @@
+const {resolve}=require("path")
+module.exports={
+	 configureWebpack:config=>{
+	 	console.log(config)
+	 	Object.assign(config,{
+               resolve:{
+               	  alias:{
+               	  	"@":resolve(__dirname,"src"),
+               	  	"components":resolve(__dirname,"src/components"),
+               	  	"assets":resolve(__dirname,"src/assets"),
+               	  	"util":resolve(__dirname,"src/util"),
+               	  	"nets":resolve(__dirname,"src/net"),
+               	  	"pages":resolve(__dirname,"src/pages")
+               	  },
+               	  extensions:[".js",".vue",".css",".sass"]
+               }
+
+	 	})
+	 	// console.log(config)
+	 },
+   devServer:{
+         host:"127.0.0.1",
+         port:8082,
+      	 proxy:{
+          "/api3":{
+                target:"http://127.0.0.1:3000/",
+                ws:true,
+                changeOrigin:true,
+                pathRewrite:{
+                  "^/api3":"/api3",
+                }
+           },
+      	 	"/api":{
+                target:"https://msinterface-jd.herokuapp.com/",
+                changeOrigin:true,
+                ws:true,
+                pathRewrite:{
+                    "^/api":"/api"
+                },
+      	 	},
+          "/api2":{
+                 target:"https://api.apiopen.top/",
+                 ws:true,
+                 changeOrigin:true,
+                 pathRewrite:{
+                     "^/api2":""
+                 }
+            },
+      	 }
+      }
+
+}

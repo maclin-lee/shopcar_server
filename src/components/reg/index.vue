@@ -1,0 +1,160 @@
+<template>
+   <div class="reg_wrap">
+     <div class="user item">
+      <span>用户名:</span>
+      <input type="text"
+       v-model="user_name" placeholder="请输入你的用户名">
+     </div>
+     <div class="pass item">
+      <span>密码:</span>
+      <input type="text"
+       v-model="pass_word" placeholder="请再次输入你的密码">
+     </div>
+     <div class="confirm item">
+      <span>邮箱:</span>
+      <input type="text"
+       v-model="email" placeholder="请输入你的邮箱">
+     </div>
+     <div class="item">
+      <span>验证码:</span>
+      <div class="verify">
+        <input type="text"
+       v-model="verify" 
+       placeholder="请输入你的验证码">
+       <input type="button" v-model="count" :disabled="disabled" 
+       @click="getVerify"/>
+      </div>
+     </div>
+     <div class="reg">
+       <button class="btn" @click="reg">注册</button>
+     </div>
+     <div class="reset item">
+       <router-link tag="span" to="/mine/findpas">找回密码</router-link>
+      <router-link tag="span" to="/mine/login">登入账户</router-link>
+      
+     </div>
+
+  </div>  
+</template>
+<script>
+export default {
+     name:"reg",
+     data(){
+         return{
+          user_name:"",
+          pass_word:"",
+          count:"发送验证码",
+          email:"",
+          verify:"",
+          disabled:false,
+
+         }
+     },
+     methods:{
+        reg(){
+            this.$apis.user.reg({
+                email:this.email,
+                username:this.user_name,
+                password:this.pass_word,
+                verify:this.verify
+            }).then((res)=>{
+                   // console.log("zhucehengg")
+                   //  console.log(res,"zhucechenggong")
+                   if(res.data.status==1){
+                    this.$router.push("/mine/login")
+                   }
+            })
+        },
+        getVerify(){
+          let email=this.email
+          let count=60
+          this.count=count
+          this.disabled=true
+          this.$apis.user.getVerify(email).then(res=>{
+             console.log(res)
+             if(res.data.status!==""){
+                this.getCount()
+             }
+          })
+        },
+        getCount(){          
+         var timer=window.setInterval(()=>{
+            this.count=--this.count<=0?0:this.count
+            // console.log(this.count)
+            if(this.count==0){
+             clearInterval(timer)
+             timer=null
+             // console.log(this.count,timer)
+             this.disabled=false
+             this.count="发送验证码"
+             }
+          },1000)
+         
+          // window.clearInterval(timer)
+          // console.log(timer)
+        }
+
+     }        
+}
+</script>
+<style scoped>
+.reg_wrap{
+  margin-top:10px;
+  padding-left:10px;
+}
+.item{
+  display:flex;
+  margin-bottom:20px;
+  height:30px;
+  font-size:16px;
+}
+.item>span{
+  margin-right:10px;
+  display:inline-block;
+  height:30px;
+  line-height:30px;
+  min-width:60px;
+}
+.item>input,.verify>input{
+  height:30px;
+  line-height:30px;
+  border:none;
+  outline:none;
+  padding-left:10px;
+  flex:1;
+}
+input:focus{
+  border:1px solid #939495;
+  outline:none;
+}
+.reg{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background-color:#fff;
+}
+.btn{
+   border:none;
+   border-radius:none;
+   width:50%;
+   height:30px;
+   line-height:30px;
+   text-align:center;
+   background-color:#e93b3d;
+   letter-spacing:5px;
+   color:#fff;
+}
+.reset{
+  margin-top:30px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.reset span{
+  padding:10px;
+  color:blue;
+}
+.count{
+  margin-left:10px;
+}
+</style>

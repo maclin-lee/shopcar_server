@@ -1,0 +1,23 @@
+export default{
+	 path:"/admin",
+	 name:"admin",
+	 component:()=>import("pages/admin/index"),
+	 children:[
+         {
+         	path:"user",
+         	component:()=>import("pages/admin/user.vue")
+         },
+         {
+         	path:"shopcar",
+         	component:()=>import("pages/admin/shopcar.vue")
+         },
+         {
+         	path:"list",
+         	component:()=>import("pages/admin/list.vue")
+         },
+         {
+         	path:"",
+         	redirect:"user"
+         }
+	 ]
+}

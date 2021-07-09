@@ -1,0 +1,31 @@
+export default {
+	name:"mine",
+	path:"/mine",
+	component:()=>{return import("../../pages/mine/index")},
+	children:[
+         {
+         	path:"",
+         	redirect:"/mine/center"
+         },
+         {
+         	path:"center",
+         	name:"center",
+         	component:()=>import("components/center/index")
+         },
+         {
+         	path:"login",
+         	name:"login",
+         	component:()=>import("components/login/index")
+         },
+         {
+         	path:"reg",
+         	name:"reg",
+         	component:()=>import("components/reg/index")
+         },
+         {
+         	path:"findpas",
+         	name:"findpas",
+         	component:()=>import("components/findpas/index")
+         }
+	]
+}
